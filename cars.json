@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "make": "Toyota",
+    "model": "Corolla",
+    "year": 2022,
+    "price": 20000,
+    "mileage": 15000,
+    "color": "White",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "available": true
+  },
+  {
+    "id": 2,
+    "make": "Toyota",
+    "model": "Camry",
+    "year": 2021,
+    "price": 25000,
+    "mileage": 30000,
+    "color": "Black",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "available": false
+  },
+  {
+    "id": 3,
+    "make": "Honda",
+    "model": "Civic",
+    "year": 2023,
+    "price": 22000,
+    "mileage": 5000,
+    "color": "Blue",
+    "fuelType": "Petrol",
+    "transmission": "Manual",
+    "available": true
+  },
+  {
+    "id": 4,
+    "make": "Hyundai",
+    "model": "Elantra",
+    "year": 2020,
+    "price": 15000,
+    "mileage": 45000,
+    "color": "Silver",
+    "fuelType": "Petrol",
+    "transmission": "Automatic",
+    "available": true
+  }
+]
