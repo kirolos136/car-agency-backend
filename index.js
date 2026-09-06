@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const loadCarsFromFile = require('./loadCars');
+const loadDataFromFile = require('./loadData');
 const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
@@ -22,7 +22,7 @@ function checkAndStartServer(err,data){
 }
 
 //loading data from json and starting the server after that
-loadCarsFromFile(checkAndStartServer);
+loadDataFromFile("cars.json", checkAndStartServer);
 
 app.get("/",(req,res)=>{
     res.json({"message" : "here will be the home page"});
