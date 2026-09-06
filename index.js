@@ -3,26 +3,38 @@ const app = express();
 require("dotenv").config();
 const loadDataFromFile = require('./loadData');
 const PORT = process.env.PORT || 3000;
+const loadDataFromFileUsingPromise = require('./loadDataPromise');
 app.use(express.json());
 
 let cars;
 let globalId;
 
-function checkAndStartServer(err,data){
-    if(err){
-        console.error(err);
-        return;
-    }
+// example using callback
+// function checkAndStartServer(err,data){
+//     if(err){
+//         console.error(err);
+//         return;
+//     }
 
+//     cars = data;
+//     globalId = Math.max(...cars.map(car => car.id)) + 1;
+//     app.listen(PORT, ()=>{
+//         console.log(`server started at Port ${PORT}`);
+//     });
+// }
+//loading data from json and starting the server after that
+// loadDataFromFile("cars.json", checkAndStartServer);
+
+// promise example
+loadDataFromFileUsingPromise("cars.json").then((data)=>{
     cars = data;
     globalId = Math.max(...cars.map(car => car.id)) + 1;
     app.listen(PORT, ()=>{
         console.log(`server started at Port ${PORT}`);
     });
-}
-
-//loading data from json and starting the server after that
-loadDataFromFile("cars.json", checkAndStartServer);
+}).catch((err)=>{
+    console.error(err);
+});
 
 app.get("/",(req,res)=>{
     res.json({"message" : "here will be the home page"});
