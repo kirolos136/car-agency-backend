@@ -1,9 +1,16 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
+
+// kept for comparison — see callback example below
 const loadDataFromFile = require('./loadData');
+
 const PORT = process.env.PORT || 3000;
+
+// kept for comparison — see promises example below
 const loadDataFromFileUsingPromise = require('./loadDataPromise');
+
+const loadDataFromFileUsingAsyncAwait = require('./loadDataAsync');
 app.use(express.json());
 
 let cars;
@@ -26,15 +33,30 @@ let globalId;
 // loadDataFromFile("cars.json", checkAndStartServer);
 
 // promise example
-loadDataFromFileUsingPromise("cars.json").then((data)=>{
-    cars = data;
-    globalId = Math.max(...cars.map(car => car.id)) + 1;
-    app.listen(PORT, ()=>{
-        console.log(`server started at Port ${PORT}`);
-    });
-}).catch((err)=>{
-    console.error(err);
-});
+// loadDataFromFileUsingPromise("cars.json").then((data)=>{
+//     cars = data;
+//     globalId = Math.max(...cars.map(car => car.id)) + 1;
+//     app.listen(PORT, ()=>{
+//         console.log(`server started at Port ${PORT}`);
+//     });
+// }).catch((err)=>{
+//     console.error(err);
+// });
+
+// async await example
+async function startServer() {
+    try {
+        cars = await loadDataFromFileUsingAsyncAwait("cars.json");
+        globalId = Math.max(...cars.map(car => car.id)) + 1;
+        app.listen(PORT,()=>{
+            console.log(`server started at Port ${PORT}`);
+        })
+    } catch (error) {
+        console.error("Failed to start the server:",err);
+    }
+}
+
+startServer();
 
 app.get("/",(req,res)=>{
     res.json({"message" : "here will be the home page"});
