@@ -1,63 +1,27 @@
-// example array
-let cars = [
-  {
-    id: 1,
-    make: "Toyota",
-    model: "Corolla",
-    year: 2022,
-    price: 20000,
-    mileage: 15000,
-    color: "White",
-    fuelType: "Petrol",
-    transmission: "Automatic",
-    available: true
-  },
-  {
-    id: 2,
-    make: "Toyota",
-    model: "Camry",
-    year: 2021,
-    price: 25000,
-    mileage: 30000,
-    color: "Black",
-    fuelType: "Petrol",
-    transmission: "Automatic",
-    available: false
-  },
-  {
-    id: 3,
-    make: "Honda",
-    model: "Civic",
-    year: 2023,
-    price: 22000,
-    mileage: 5000,
-    color: "Blue",
-    fuelType: "Petrol",
-    transmission: "Manual",
-    available: true
-  },
-  {
-    id: 4,
-    make: "Hyundai",
-    model: "Elantra",
-    year: 2020,
-    price: 15000,
-    mileage: 45000,
-    color: "Silver",
-    fuelType: "Petrol",
-    transmission: "Automatic",
-    available: true
-  }
-];
-
 const express = require("express");
 const app = express();
-
 require("dotenv").config();
-
 const PORT = process.env.PORT || 3000;
-
+const loadDataFromFileUsingAsyncAwait = require('./loadDataAsync');
 app.use(express.json());
+
+let cars;
+let globalId;
+
+// async await example
+async function startServer() {
+    try {
+        cars = await loadDataFromFileUsingAsyncAwait("cars.json");
+        globalId = Math.max(...cars.map(car => car.id)) + 1;
+        app.listen(PORT,()=>{
+            console.log(`server started at Port ${PORT}`);
+        })
+    } catch (error) {
+        console.error("Failed to start the server:",err);
+    }
+}
+
+startServer();
 
 app.get("/",(req,res)=>{
     res.json({"message" : "here will be the home page"});
@@ -69,15 +33,14 @@ app.get("/cars",(req,res)=>{
 
 app.get("/cars/:id",(req,res)=>{
     const reqCarId = Number(req.params.id);
-    const reqCar = cars.filter(car => car.id === reqCarId);
-    if(reqCar.length === 0){
+    const reqCar = cars.find(car => car.id === reqCarId);
+    if(!reqCar){
         res.status(404).json({message:"Car not Found"});
     }else{
         res.json(reqCar);
     }
 });
 
-let globalId = cars.length + 1;
 
 app.post("/cars",(req,res)=>{
     const {make , model , year , price} = req.body;
@@ -124,7 +87,3 @@ app.delete("/cars/:id",(req,res)=>{
         res.status(404).json({message:"Car is Not Found"});
     }
 })
-
-app.listen(PORT, ()=>{
-    console.log(`server started at Port ${PORT}`);
-});
