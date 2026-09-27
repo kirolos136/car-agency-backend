@@ -18,6 +18,11 @@ app.get("/",(req,res)=>{
 
 app.use('/cars' , carsRouter);
 
+app.use((err,req,res,next)=>{
+    console.log(`The error is ${err.toString()}`);
+    return res.status(500).json({'message':'something went wrong'});
+})
+
 app.listen(PORT, ()=>{
     console.log(`server started at Port ${PORT}`);
 });
